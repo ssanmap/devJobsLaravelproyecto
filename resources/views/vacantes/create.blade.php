@@ -29,8 +29,8 @@
             <label for="categoria" class="block text-gray-700 text-sm mb-2">Categoria : </label>
 
             <select name="categoria" class="block appearance-none  border border-gray-200
-                text-gray-700 rounded leading-tight
-                 focus:outline-none focus:bg-white focus:border.gray-500 p-3 bg-gray-100 w-full" id="categoria">
+                    text-gray-700 rounded leading-tight
+                     focus:outline-none focus:bg-white focus:border.gray-500 p-3 bg-gray-100 w-full" id="categoria">
                 <option value="" disabled selected> -Selecciona -</option>
                 @foreach ($categorias as $categoria)
                     <option value="{{ $categoria->id }}">
@@ -46,8 +46,8 @@
             <label for="experiencia" class="block text-gray-700 text-sm mb-2">Experiencia : </label>
 
             <select name="experiencia" class="block appearance-none  border border-gray-200
-                text-gray-700 rounded leading-tight
-                 focus:outline-none focus:bg-white focus:border.gray-500 p-3 bg-gray-100 w-full" id="experiencia">
+                    text-gray-700 rounded leading-tight
+                     focus:outline-none focus:bg-white focus:border.gray-500 p-3 bg-gray-100 w-full" id="experiencia">
                 <option value="" disabled selected> -Selecciona -</option>
                 @foreach ($experiencias as $experiencia)
                     <option value="{{ $experiencia->id }}">
@@ -63,8 +63,8 @@
             <label for="ubicaciones" class="block text-gray-700 text-sm mb-2">Ubicacion : </label>
 
             <select name="ubicacion" class="block appearance-none  border border-gray-200
-                text-gray-700 rounded leading-tight
-                 focus:outline-none focus:bg-white focus:border.gray-500 p-3 bg-gray-100 w-full" id="ubicacion">
+                    text-gray-700 rounded leading-tight
+                     focus:outline-none focus:bg-white focus:border.gray-500 p-3 bg-gray-100 w-full" id="ubicacion">
                 <option value="" disabled selected> -Selecciona -</option>
                 @foreach ($ubicaciones as $ubicacion)
                     <option value="{{ $ubicacion->id }}">
@@ -80,8 +80,8 @@
             <label for="salario" class="block text-gray-700 text-sm mb-2">Salarios : </label>
 
             <select name="salario" class="block appearance-none  border border-gray-200
-                text-gray-700 rounded leading-tight
-                 focus:outline-none focus:bg-white focus:border.gray-500 p-3 bg-gray-100 w-full" id="salario">
+                    text-gray-700 rounded leading-tight
+                     focus:outline-none focus:bg-white focus:border.gray-500 p-3 bg-gray-100 w-full" id="salario">
                 <option value="" disabled selected> -Selecciona -</option>
                 @foreach ($salarios as $salario)
                     <option value="{{ $salario->id }}">
@@ -103,9 +103,19 @@
         <div class="mb-5">
             <label for="descripcion" class="block text-gray-700 text-sm mb-2">Imagen Vacante : </label>
             <div class="dropzone rounded bg-gray-100" id="dropzoneDevJobs"></div>
+            <input type="hidden" name="imagen" id="imagen">
+            <p id="error"></p>
 
         </div>
 
+        <div class="mb-5">
+            <label for="skills" class="block text-gray-700 text-sm mb-2">Habilidades y Conocimientos : </label>
+            @php
+                $skills = ['HTML5', 'CSS3', 'CSSGrid', 'Flexbox', 'JavaScript', 'jQuery', 'Node', 'Angular', 'VueJS', 'ReactJS', 'React Hooks', 'Redux', 'Apollo', 'GraphQL', 'TypeScript', 'PHP', 'Laravel', 'Symfony', 'Python', 'Django', 'ORM', 'Sequelize', 'Mongoose', 'SQL', 'MVC', 'SASS', 'WordPress', 'Express', 'Deno', 'React Native', 'Flutter', 'MobX', 'C#', 'Ruby on Rails'];
+            @endphp
+            <lista-skills :skills="{{json_encode($skills)}}"></lista-skills>
+
+        </div>
 
         <button type="submit"
             class="bg-teal-500 w-full hover:bg-teal-600 text-gray-100 font-bold p-3 focus:outline focus:shadow-outline uppercase">
@@ -147,7 +157,45 @@
             })
 
             const dropzoneDevJobs = new Dropzone('#dropzoneDevJobs', {
-                url: "/vacantes/imagen"
+                url: "/vacantes/imagen",
+                dictDefaultMessage: 'Sube aqui tu Imagen',
+                dictRemoveFile: 'Borrar archivo',
+                acceptedFiles: '.png,.jpg,.jpeg,.gif,.bmp',
+                addRemoveLinks: true,
+                maxFiles: 1,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                },
+                success: function(file, response) {
+                    console.log(response.correcto);
+                    document.querySelector('#error').textContent = ''
+                    // coloca la respuesta en el server
+                    document.querySelector('#imagen').value = response.correcto;
+                    // añadir al objeto el nombre del server
+                    file.nombreServidor = response.correcto;
+                },
+                // error: function (file, response){
+                //     console.log(response)
+                //     console.log(file);
+                //     document.querySelector('#error').textContent = 'Formato No valido'
+                // },
+                maxfilesexceeded: function(file) {
+                    if (this.files[1] != null) {
+                        this.removeFile(this.files[0]);
+                        this.addFile(file);
+
+                    }
+                },
+                removedfile: function(file, response) {
+
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                    // console.log(file)
+                    params = {
+                        imagen: file.nombreServidor
+                    }
+                    axios.post('/vacantes/borrarimagen', params)
+                        .then(respuesta => console.log(respuesta))
+                }
             })
 
         })
