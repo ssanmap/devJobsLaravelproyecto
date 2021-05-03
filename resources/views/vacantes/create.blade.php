@@ -16,13 +16,25 @@
 @section('content')
     <h1 class="text-2xl text-center mt-10">Nueva Vacante</h1>
 
-    <form action="" class="max-w-lg mx-auto my-10">
+    <form action="{{ route('vacantes.store') }}"
+        method="POST"
+    class="max-w-lg mx-auto my-10">
+    @csrf
 
         <div class="mb-5">
             <label for="titulo" class="block text-gray-700 text-sm mb-2">Titulo Vacante: </label>
 
             <input id="titulo" type="titulo" class="p-3 rounded w-full bg-gray-100  @error('titulo') is-invalid @enderror"
-                name="titulo" value="{{ old('titulo') }}" autocomplete="titulo" autofocus>
+                name="titulo"
+                placeholder="Inserta tu titulo"
+                value="{{ old('titulo') }}" autocomplete="titulo" autofocus>
+
+                @error('titulo')
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-3 mb-6" role="alert">
+                        <strong class="font-bold text-center">Error!</strong>
+                        <span class="block">{{ $message }}</span>
+                    </div>
+                @enderror
         </div>
 
         <div class="mb-5">
@@ -33,13 +45,21 @@
                      focus:outline-none focus:bg-white focus:border.gray-500 p-3 bg-gray-100 w-full" id="categoria">
                 <option value="" disabled selected> -Selecciona -</option>
                 @foreach ($categorias as $categoria)
-                    <option value="{{ $categoria->id }}">
+                    <option
+                     {{ old('categoria') == $categoria->id ? 'selected' : ''}}
+                     value="{{ $categoria->id }}">
                         {{ $categoria->nombre }}
                     </option>
 
                 @endforeach
 
             </select>
+            @error('categoria')
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-3 mb-6" role="alert">
+                <strong class="font-bold text-center">Error!</strong>
+                <span class="block">{{ $message }}</span>
+            </div>
+        @enderror
         </div>
 
         <div class="mb-5">
@@ -50,13 +70,21 @@
                      focus:outline-none focus:bg-white focus:border.gray-500 p-3 bg-gray-100 w-full" id="experiencia">
                 <option value="" disabled selected> -Selecciona -</option>
                 @foreach ($experiencias as $experiencia)
-                    <option value="{{ $experiencia->id }}">
+                    <option
+                    {{ old('experiencia') == $experiencia->id ? 'selected' : ''}}
+                    value="{{ $experiencia->id }}">
                         {{ $experiencia->nombre }}
                     </option>
 
                 @endforeach
 
             </select>
+            @error('experiencia')
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-3 mb-6" role="alert">
+                <strong class="font-bold text-center">Error!</strong>
+                <span class="block">{{ $message }}</span>
+            </div>
+        @enderror
         </div>
 
         <div class="mb-5">
@@ -67,13 +95,21 @@
                      focus:outline-none focus:bg-white focus:border.gray-500 p-3 bg-gray-100 w-full" id="ubicacion">
                 <option value="" disabled selected> -Selecciona -</option>
                 @foreach ($ubicaciones as $ubicacion)
-                    <option value="{{ $ubicacion->id }}">
+                    <option
+                    {{ old('ubicacion') == $ubicacion->id ? 'selected' : ''}}
+                    value="{{ $ubicacion->id }}">
                         {{ $ubicacion->nombre }}
                     </option>
 
                 @endforeach
 
             </select>
+            @error('ubicacion')
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-3 mb-6" role="alert">
+                <strong class="font-bold text-center">Error!</strong>
+                <span class="block">{{ $message }}</span>
+            </div>
+        @enderror
         </div>
 
         <div class="mb-5">
@@ -84,37 +120,69 @@
                      focus:outline-none focus:bg-white focus:border.gray-500 p-3 bg-gray-100 w-full" id="salario">
                 <option value="" disabled selected> -Selecciona -</option>
                 @foreach ($salarios as $salario)
-                    <option value="{{ $salario->id }}">
+                    <option
+                    {{ old('salario') == $salario->id ? 'selected' : ''}}
+                    value="{{ $salario->id }}">
                         {{ $salario->nombre }}
                     </option>
 
                 @endforeach
 
             </select>
+            @error('salario')
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-3 mb-6" role="alert">
+                <strong class="font-bold text-center">Error!</strong>
+                <span class="block">{{ $message }}</span>
+            </div>
+        @enderror
         </div>
 
         <div class="mb-5">
             <label for="descripcion" class="block text-gray-700 text-sm mb-2">Descripción del puesto : </label>
             <div class="editable p-3 bg-gray-100 rounded form-input w-full text-gray-700"></div>
-            <input type="hidden" name="descripcion" id="descripcion">
+            <input type="hidden" name="descripcion" id="descripcion" value="{{ old('descripcion') }}">
+
+            @error('descripcion')
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-3 mb-6" role="alert">
+                <strong class="font-bold text-center">Error!</strong>
+                <span class="block">{{ $message }}</span>
+            </div>
+        @enderror
         </div>
 
 
         <div class="mb-5">
-            <label for="descripcion" class="block text-gray-700 text-sm mb-2">Imagen Vacante : </label>
+            <label for="imagen" class="block text-gray-700 text-sm mb-2">Imagen Vacante : </label>
             <div class="dropzone rounded bg-gray-100" id="dropzoneDevJobs"></div>
-            <input type="hidden" name="imagen" id="imagen">
+            <input type="hidden" name="imagen" id="imagen" value="{{ old('imagen')}}">
+
+            @error('imagen')
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-3 mb-6" role="alert">
+                <strong class="font-bold text-center">Error!</strong>
+                <span class="block">{{ $message }}</span>
+            </div>
+        @enderror
             <p id="error"></p>
 
         </div>
 
         <div class="mb-5">
-            <label for="skills" class="block text-gray-700 text-sm mb-2">Habilidades y Conocimientos : </label>
+            <label for="skills" class="block text-gray-700 text-sm mb-2">Habilidades y Conocimientos :
+                <span class="text-xs">(Elige Al menos 2)</span>
+            </label>
             @php
                 $skills = ['HTML5', 'CSS3', 'CSSGrid', 'Flexbox', 'JavaScript', 'jQuery', 'Node', 'Angular', 'VueJS', 'ReactJS', 'React Hooks', 'Redux', 'Apollo', 'GraphQL', 'TypeScript', 'PHP', 'Laravel', 'Symfony', 'Python', 'Django', 'ORM', 'Sequelize', 'Mongoose', 'SQL', 'MVC', 'SASS', 'WordPress', 'Express', 'Deno', 'React Native', 'Flutter', 'MobX', 'C#', 'Ruby on Rails'];
             @endphp
-            <lista-skills :skills="{{json_encode($skills)}}"></lista-skills>
+            <lista-skills :skills="{{json_encode($skills)}}"
+            :oldskills="{{ json_encode( old('skills')) }}"
+            ></lista-skills>
 
+            @error('skills')
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-3 mb-6" role="alert">
+                <strong class="font-bold text-center">Error!</strong>
+                <span class="block">{{ $message }}</span>
+            </div>
+        @enderror
         </div>
 
         <button type="submit"
@@ -151,11 +219,17 @@
                 }
             });
 
+            // agrega al input hidden lo q el usuario escribe en medium editor
             editor.subscribe('editableInput', function(eventObj, editable) {
                 const contenido = editor.getContent();
                 document.querySelector('#descripcion').value = contenido;
             })
 
+            // llena el input con lo que el usuario escribe
+            editor.setContent( document.querySelector('#descripcion').value);
+
+
+            // Dropzone paara imagenes
             const dropzoneDevJobs = new Dropzone('#dropzoneDevJobs', {
                 url: "/vacantes/imagen",
                 dictDefaultMessage: 'Sube aqui tu Imagen',
@@ -165,6 +239,20 @@
                 maxFiles: 1,
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                },
+                init: function(){
+                    if(document.querySelector('#imagen').value.trim() ){
+                        let imagenPublicada = {};
+                        imagenPublicada.size = 1234;
+                        imagenPublicada.name = document.querySelector('#imagen').value;
+
+                        this.options.addedfile.call(this, imagenPublicada);
+                        this.options.thumbnail.call(this, imagenPublicada, `/storage/vacantes/${imagenPublicada.name}`);
+                        imagenPublicada.previewElement.classList.add('dz-sucess');
+                        imagenPublicada.previewElement.classList.add('dz-complete');
+
+
+                    }
                 },
                 success: function(file, response) {
                     console.log(response.correcto);
@@ -191,7 +279,7 @@
                     file.previewElement.parentNode.removeChild(file.previewElement);
                     // console.log(file)
                     params = {
-                        imagen: file.nombreServidor
+                        imagen: file.nombreServidor ?? document.querySelector('#imagen').value
                     }
                     axios.post('/vacantes/borrarimagen', params)
                         .then(respuesta => console.log(respuesta))

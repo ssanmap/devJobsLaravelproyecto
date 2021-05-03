@@ -9,17 +9,13 @@ use App\Ubicacion;
 use App\Experiencia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Redirect;
 
 class VacanteController extends Controller
 {
 
 
-    public function __construct()
-    {
-        // revisar  q el usuario este aut y identificado
-        $this->middleware(['auth', 'verified']);
 
-    }
     /**
      * Display a listing of the resource.
      *
@@ -28,7 +24,12 @@ class VacanteController extends Controller
     public function index()
     {
         //
-        return view('vacantes.index');
+            // $vacantes = auth()->user()->vacantes;
+                $vacantes = Vacante::where('user_id', auth()->user()->id)->simplePaginate(3);
+
+            // dd($vacantes);
+
+        return view('vacantes.index', compact('vacantes'));
     }
 
     /**
@@ -59,7 +60,32 @@ class VacanteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //validacion
+        $data = $request->validate([
+            'titulo' => 'required|min:8',
+            'categoria' => 'required',
+            'experiencia' => 'required',
+            'ubicacion' => 'required',
+            'salario' => 'required',
+            'descripcion' => 'required|min:50',
+            'imagen' => 'required',
+            'skills' => 'required|min:2'
+
+        ]);
+
+        // almacenar en la bd
+        auth()->user()->vacantes()->create([
+
+            'titulo' => $data['titulo'],
+            'imagen' => $data['imagen'],
+            'descripcion' => $data['descripcion'],
+            'skills' => $data['skills'],
+            'categoria_id' => $data['categoria'],
+            'experiencia_id' => $data['experiencia'],
+            'ubicacion_id' => $data['ubicacion'],
+            'salario_id' => $data['salario'],
+        ]);
+        return redirect()->action('VacanteController@index');
     }
 
     /**
@@ -71,6 +97,7 @@ class VacanteController extends Controller
     public function show(Vacante $vacante)
     {
         //
+        return view('vacantes.show')->with('vacante', $vacante);
     }
 
     /**
