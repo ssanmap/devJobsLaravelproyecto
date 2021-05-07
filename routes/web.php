@@ -34,6 +34,9 @@ Route::post('vacantes/imagen', 'VacanteController@imagen')->name('vacantes.image
 Route::post('vacantes/borrarimagen', 'VacanteController@borrarimagen')->name('vacantes.borrar');
 });
 
+// enviar datos para una vacante
+Route::post('candidatos/store', 'CandidatoController@store')->name('candidatos.store');
+
 // muestra los trabajos en el fronen
 Route::get('vacantes/{vacante}', 'VacanteController@show')->name('vacantes.show');
 

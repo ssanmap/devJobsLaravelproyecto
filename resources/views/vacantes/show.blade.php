@@ -42,9 +42,7 @@
                 {!! $vacante->descripcion   !!}
             </div>
         </div>
-        <div class="md:w-2/5">
-            2
-        </div>
+        @include('ui.contacto')
 
     </div>
 
