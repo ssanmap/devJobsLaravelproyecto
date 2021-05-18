@@ -32,9 +32,12 @@ Route::post('vacantes', 'VacanteController@store')->name('vacantes.store');
 // subir imagenes
 Route::post('vacantes/imagen', 'VacanteController@imagen')->name('vacantes.imagen');
 Route::post('vacantes/borrarimagen', 'VacanteController@borrarimagen')->name('vacantes.borrar');
+// notificaciones
+Route::get('notificaciones', 'NotificacionesController')->name('notificaciones');
 });
 
 // enviar datos para una vacante
+Route::get('candidatos/{id}', 'CandidatoController@index')->name('candidatos.index');
 Route::post('candidatos/store', 'CandidatoController@store')->name('candidatos.store');
 
 // muestra los trabajos en el fronen
