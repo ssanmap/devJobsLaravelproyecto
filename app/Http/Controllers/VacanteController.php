@@ -98,6 +98,7 @@ class VacanteController extends Controller
     {
         //
         return view('vacantes.show')->with('vacante', $vacante);
+
     }
 
     /**
@@ -129,9 +130,13 @@ class VacanteController extends Controller
      * @param  \App\Vacante  $vacante
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Vacante $vacante)
+    public function destroy(Vacante $vacante, Request $request)
     {
-        //
+        //elimina vacante
+
+       $vacante->delete();
+
+        return response()->json(['mensaje' => 'se elimino de manera correcta' .$vacante->titulo]);
     }
 
     public function imagen (Request $request)
@@ -155,5 +160,15 @@ class VacanteController extends Controller
             }
             return response('Imagen deleted', 200);
         }
+    }
+
+    public function estado(Request $request, Vacante $vacante)
+    {
+        // leer estado y asignarlo
+        $vacante->activa = $request->estado;
+
+        $vacante->save();
+        return response()->json(['respuesta' => 'correcto']);
+        //
     }
 }

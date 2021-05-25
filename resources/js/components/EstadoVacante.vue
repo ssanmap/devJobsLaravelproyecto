@@ -28,6 +28,14 @@
                }else{
                     this.estadoVacanteData = 1;
                }
+            //    enviar a axios
+            const params = {
+                estado: this.estadoVacanteData
+            }
+                axios
+                    .post('/vacantes/' + this.vacanteId, params)
+                    .then(resp => console.log(resp))
+                    .catch(error => console.log(error))
             },
             claseEstadoVacante(){
                 return this.estadoVacanteData === 1 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
