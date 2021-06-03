@@ -30,7 +30,7 @@
         </div>
     @endif
     <div id="app">
-        <nav class="bg-gray-500 shadow-md py-6">
+        <nav class="bg-gray-500 shadow-md py-6 ">
             <div class="container mx-auto md:px-0">
                 <div class="flex items-center justify-around">
                     <a class="text-2xl text-white" href="{{ url('/') }}">
@@ -79,7 +79,7 @@
             </div>
         </nav>
         <div class="bg-gray-700">
-            <nav class="container mx-auto flex space-x-1 ">
+            <nav class="container mx-auto flex flex-col text-center md:flex-row space-x-1 ">
                 @yield('navegacion')
             </nav>
         </div>

@@ -15,13 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Auth::routes( ['verify' => true]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
 // rutas protegidas
 
 Route::group(['middleware' => ['auth', 'verified']], function(){
@@ -30,6 +28,8 @@ Route::get('vacantes', 'VacanteController@index')->name('vacantes.index');
 Route::get('vacantes/create', 'VacanteController@create')->name('vacantes.create');
 Route::post('vacantes', 'VacanteController@store')->name('vacantes.store');
 Route::delete('/vacantes/{vacante}', 'VacanteController@destroy')->name('vacantes.destroy');
+Route::get('vacantes/{vacante}/edit', 'VacanteController@edit')->name('vacantes.edit');
+Route::put('vacantes/{vacante}', 'VacanteController@update')->name('vacantes.update');
 
 // subir imagenes
 Route::post('vacantes/imagen', 'VacanteController@imagen')->name('vacantes.imagen');
@@ -41,6 +41,13 @@ Route::post('/vacantes/{vacante}', 'VacanteController@estado')->name('vacantes.e
 Route::get('notificaciones', 'NotificacionesController')->name('notificaciones');
 });
 
+
+// pagina de inicio
+    Route::get('/', 'InicioController')->name('inicio');
+
+    // cat
+
+    Route::get('/categorias/{categoria}', 'CategoriaController@show')->name('categorias.show');
 // enviar datos para una vacante
 Route::get('candidatos/{id}', 'CandidatoController@index')->name('candidatos.index');
 Route::post('candidatos/store', 'CandidatoController@store')->name('candidatos.store');
